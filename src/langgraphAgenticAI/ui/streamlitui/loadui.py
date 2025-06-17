@@ -1,3 +1,6 @@
+#This file loads the initial Streamlit UI for the LangGraph AgenticAI application.
+# It sets up the sidebar with options for LLM selection, use case selection, and API key inputs.
+
 import streamlit as st
 import os
 
@@ -18,25 +21,27 @@ class LoadStreamlitUI:
         "review_feedback": "",
         "decision": None
     }
+  
+
 
     def load_streamlit_ui(self):
         st.set_page_config(page_title= "🤖 " + self.config.get_page_title(), layout="wide")
         st.header("🤖 " + self.config.get_page_title())
+        st.session_state.timeframe = ''
+        st.session_state.IsFetchButtonClicked = False
+        st.session_state.IsSDLC = False
+        
+        
 
         with st.sidebar:
-            #Get options from the config 
+            # Get options from config
             llm_options = self.config.get_llm_options()
             usecase_options = self.config.get_usecase_options()
 
-            #LLM selection
-            self.user_controls["selected_llm"] = st.selectbox(
-                "Select LLM",
-                options=llm_options,
-                index=0,
-                help="Select the LLM you want to use for this project."
-            )
+            # LLM selection
+            self.user_controls["selected_llm"] = st.selectbox("Select LLM", llm_options)
 
-            if self.user_controls["selected_llm"] == "Groq":
+            if self.user_controls["selected_llm"] == 'Groq':
                 # Model selection
                 model_options = self.config.get_groq_model_options()
                 self.user_controls["selected_groq_model"] = st.selectbox("Select Model", model_options)
@@ -46,14 +51,10 @@ class LoadStreamlitUI:
                 # Validate API key
                 if not self.user_controls["GROQ_API_KEY"]:
                     st.warning("⚠️ Please enter your GROQ API key to proceed. Don't have? refer : https://console.groq.com/keys ")
-
-            #Usecase selection
-            self.user_controls["selected_usecase"] = st.selectbox(
-                "Select Use Case",
-                options=usecase_options,
-                index=0,
-                help="Select the use case you want to work on."
-            )
+                   
+            
+            # Use case selection
+            self.user_controls["selected_usecase"] = st.selectbox("Select Usecases", usecase_options)
 
             if self.user_controls["selected_usecase"] =="Chatbot with Tool" or self.user_controls["selected_usecase"] =="AI News" :
                 # API key input
@@ -85,4 +86,3 @@ class LoadStreamlitUI:
             
         
         return self.user_controls
-

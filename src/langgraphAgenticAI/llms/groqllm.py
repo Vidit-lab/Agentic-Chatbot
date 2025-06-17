@@ -13,7 +13,7 @@ class GroqLLM:
             if groq_api_key=='' and os.environ["GROQ_API_KEY"] =='':
                 st.error("Please Enter the Groq API KEY")
 
-            llm = ChatGroq(api_key =groq_api_key, model=selected_groq_model)
+            llm = ChatGroq(api_key=groq_api_key, model=selected_groq_model)
 
         except Exception as e:
             raise ValueError(f"Error Occurred with Exception : {e}")
